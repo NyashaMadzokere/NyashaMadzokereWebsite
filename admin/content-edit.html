@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Content - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .content-editor {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .json-editor {
+            font-family: 'Courier New', monospace;
+            min-height: 400px;
+        }
+        .section-preview {
+            background: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><i class="fas fa-crown"></i> Admin Panel</div></div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="blogs.html" class="menu-item"><i class="fas fa-blog"></i><span>Blog Posts</span></a>
+                <a href="projects.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Projects</span></a>
+                <a href="content.html" class="menu-item active"><i class="fas fa-edit"></i><span>Website Content</span></a>
+                <a href="contacts.html" class="menu-item"><i class="fas fa-envelope"></i><span>Contact Messages</span></a>
+                <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">Edit Content</h1>
+                <div class="user-info">
+                    <a href="content.html" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                </div>
+            </div>
+
+            <form id="contentForm" class="content-editor">
+                <div class="card">
+                    <h2 id="sectionName" style="margin-bottom: 1.5rem;">Loading...</h2>
+                    
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" placeholder="Section title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subtitle">Subtitle</label>
+                        <input type="text" id="subtitle" name="subtitle" placeholder="Section subtitle">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="5" placeholder="Main description text"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contentJson">Content (JSON)</label>
+                        <textarea id="contentJson" name="contentJson" class="json-editor" placeholder='{"key": "value"}'></textarea>
+                        <small style="color: var(--text-muted);">Enter content as JSON. This can include arrays, objects, or any structured data.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isActive" checked>
+                            <span>Active (Show on website)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="saveBtn">
+                        <i class="fas fa-save"></i> Save Content
+                    </button>
+                    <div id="message" class="message" style="margin-top: 1rem;"></div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        requireAuth();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const section = urlParams.get('section');
+        
+        if (!section) {
+            window.location.href = 'content.html';
+        }
+
+        const sectionNames = {
+            'hero': 'Hero Section',
+            'about': 'About Section',
+            'services': 'Services Section',
+            'portfolio': 'Portfolio Section',
+            'skills': 'Skills Section',
+            'contact': 'Contact Section',
+            'footer': 'Footer Section'
+        };
+
+        document.getElementById('sectionName').textContent = sectionNames[section] || section;
+        document.getElementById('pageTitle').textContent = `Edit ${sectionNames[section] || section}`;
+
+        // Load existing content
+        async function loadContent() {
+            try {
+                const response = await fetchWithAuth(`/content/${section}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const content = data.data;
+                    document.getElementById('title').value = content.title || '';
+                    document.getElementById('subtitle').value = content.subtitle || '';
+                    document.getElementById('description').value = content.description || '';
+                    document.getElementById('contentJson').value = JSON.stringify(content.content || {}, null, 2);
+                    document.getElementById('isActive').checked = content.isActive !== false;
+                } else {
+                    // Section doesn't exist yet, show empty form
+                    showMessage('This section doesn\'t exist yet. Create it by saving.', 'info');
+                }
+            } catch (error) {
+                // Section doesn't exist, that's okay
+                console.log('Section not found, will create new');
+            }
+        }
+
+        // Save content
+        document.getElementById('contentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            let contentData;
+            try {
+                contentData = JSON.parse(document.getElementById('contentJson').value);
+            } catch (error) {
+                showMessage('Invalid JSON in content field', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Content';
+                return;
+            }
+            
+            const formData = {
+                section: section,
+                title: document.getElementById('title').value,
+                subtitle: document.getElementById('subtitle').value,
+                description: document.getElementById('description').value,
+                content: contentData,
+                isActive: document.getElementById('isActive').checked
+            };
+            
+            try {
+                const response = await fetchWithAuth(`/content/${section}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('Content saved successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'content.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Error saving content', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save"></i> Save Content';
+                }
+            } catch (error) {
+                console.error('Error saving content:', error);
+                showMessage('Error saving content', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Content';
+            }
+        });
+
+        function showMessage(msg, type) {
+            const el = document.getElementById('message');
+            el.textContent = msg;
+            el.className = `message ${type}`;
+            el.style.display = 'block';
+        }
+
+        loadContent();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Message - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><i class="fas fa-crown"></i> Admin Panel</div></div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="blogs.html" class="menu-item"><i class="fas fa-blog"></i><span>Blog Posts</span></a>
+                <a href="projects.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Projects</span></a>
+                <a href="contacts.html" class="menu-item active"><i class="fas fa-envelope"></i><span>Contact Messages</span></a>
+                <a href="content.html" class="menu-item"><i class="fas fa-edit"></i><span>Website Content</span></a>
+                <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">Message Details</h1>
+                <div class="user-info">
+                    <a href="contacts.html" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                </div>
+            </div>
+
+            <div class="card" id="messageCard" style="display: none;">
+                <div class="form-group">
+                    <label>From</label>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--dark-bg); border-radius: 8px;">
+                        <div class="user-avatar" id="senderAvatar" style="width: 50px; height: 50px;">A</div>
+                        <div>
+                            <div style="font-weight: 600;" id="senderName"></div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;" id="senderEmail"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject</label>
+                    <div style="padding: 1rem; background: var(--dark-bg); border-radius: 8px; font-weight: 600;" id="messageSubject"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Message</label>
+                    <div style="padding: 1.5rem; background: var(--dark-bg); border-radius: 8px; line-height: 1.8; white-space: pre-wrap;" id="messageContent"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Details</label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="padding: 1rem; background: var(--dark-bg); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Date</div>
+                            <div id="messageDate"></div>
+                        </div>
+                        <div style="padding: 1rem; background: var(--dark-bg); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">Status</div>
+                            <div><span class="badge" id="messageStatus"></span></div>
+                        </div>
+                        <div style="padding: 1rem; background: var(--dark-bg); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">IP Address</div>
+                            <div style="font-family: monospace; font-size: 0.875rem;" id="messageIP"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <a href="#" id="replyLink" class="btn btn-primary">
+                        <i class="fas fa-reply"></i> Reply via Email
+                    </a>
+                    <button class="btn btn-secondary" onclick="markAsRead()" id="markReadBtn">
+                        <i class="fas fa-check"></i> Mark as Read
+                    </button>
+                </div>
+            </div>
+
+            <div id="loadingState" class="card" style="text-align: center; padding: 4rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <p style="color: var(--text-secondary);">Loading message...</p>
+            </div>
+
+            <div id="errorState" class="card" style="text-align: center; padding: 4rem; display: none;">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--error-color); margin-bottom: 1rem;"></i>
+                <h2 style="color: var(--error-color);">Message Not Found</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">The message you're looking for doesn't exist.</p>
+                <a href="contacts.html" class="btn btn-primary">Back to Messages</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        requireAuth();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const messageId = urlParams.get('id');
+        let currentMessage = null;
+
+        async function loadMessage() {
+            if (!messageId) {
+                showError();
+                return;
+            }
+
+            try {
+                // Get all messages and find the one we need
+                const response = await fetchWithAuth('/contact');
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    currentMessage = data.data.find(msg => msg._id === messageId);
+                    
+                    if (currentMessage) {
+                        displayMessage(currentMessage);
+                    } else {
+                        showError();
+                    }
+                } else {
+                    showError();
+                }
+            } catch (error) {
+                console.error('Error loading message:', error);
+                showError();
+            }
+        }
+
+        function displayMessage(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('messageCard').style.display = 'block';
+            
+            document.getElementById('senderName').textContent = message.name || 'Unknown';
+            document.getElementById('senderEmail').textContent = message.email || 'N/A';
+            document.getElementById('senderAvatar').textContent = (message.name || 'U').charAt(0).toUpperCase();
+            document.getElementById('messageSubject').textContent = message.subject || 'No subject';
+            document.getElementById('messageContent').textContent = message.message || 'No message content';
+            document.getElementById('messageDate').textContent = formatDate(message.createdAt || new Date());
+            document.getElementById('messageIP').textContent = message.ipAddress || 'N/A';
+            
+            const statusEl = document.getElementById('messageStatus');
+            statusEl.textContent = message.status || 'new';
+            statusEl.className = `badge badge-${message.status === 'new' ? 'warning' : message.status === 'replied' ? 'success' : 'info'}`;
+            
+            document.getElementById('replyLink').href = `mailto:${message.email}?subject=Re: ${encodeURIComponent(message.subject || '')}`;
+        }
+
+        function markAsRead() {
+            // This would require a PUT endpoint to update message status
+            // For now, just show a message
+            showToast('Message marked as read', 'success');
+        }
+
+        function showError() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMessage);
+    </script>
+</body>
+</html>
+

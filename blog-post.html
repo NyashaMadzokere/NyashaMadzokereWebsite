@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Read our latest blog post about Shopify development and e-commerce solutions.">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Blog Post - Nyasha Madzokere">
+    <meta property="og:description" content="Read our latest insights on Shopify development">
+    
+    <title>Blog Post - Nyasha Madzokere | Shopify Developer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        .blog-post-page {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+        
+        .blog-post-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .blog-post-header {
+            margin-bottom: 3rem;
+        }
+        
+        .blog-post-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            flex-wrap: wrap;
+        }
+        
+        .blog-post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .blog-post-meta i {
+            color: var(--primary-color);
+        }
+        
+        .blog-post-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .blog-post-category {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(150, 191, 72, 0.1);
+            border: 1px solid rgba(150, 191, 72, 0.3);
+            border-radius: 50px;
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-post-excerpt {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--dark-bg-secondary);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+        }
+        
+        .blog-post-content {
+            background: var(--dark-bg-secondary);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        .blog-post-content h1,
+        .blog-post-content h2,
+        .blog-post-content h3 {
+            color: var(--text-primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-display);
+        }
+        
+        .blog-post-content h1 {
+            font-size: 2rem;
+        }
+        
+        .blog-post-content h2 {
+            font-size: 1.75rem;
+        }
+        
+        .blog-post-content h3 {
+            font-size: 1.5rem;
+        }
+        
+        .blog-post-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-post-content ul,
+        .blog-post-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .blog-post-content li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .blog-post-content code {
+            background: var(--dark-bg);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--primary-color);
+        }
+        
+        .blog-post-content pre {
+            background: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        
+        .blog-post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+        
+        .blog-post-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .blog-post-content a {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .blog-post-content a:hover {
+            color: var(--accent-color);
+        }
+        
+        .blog-post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .blog-post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .blog-post-tags span {
+            padding: 0.5rem 1rem;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        .blog-post-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .blog-post-actions button {
+            padding: 0.75rem 1.5rem;
+            background: var(--dark-bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .blog-post-actions button:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .blog-post-actions button.liked {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+        
+        .back-to-blog {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+        
+        .back-to-blog:hover {
+            color: var(--primary-color);
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .loading-state i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .error-state h2 {
+            color: var(--error-color);
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-post-content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .blog-post-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">NM</span>
+                <span class="logo-accent">.</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#services" class="nav-link">Services</a></li>
+                <li><a href="index.html#portfolio" class="nav-link">Portfolio</a></li>
+                <li><a href="index.html#blog" class="nav-link">Blog</a></li>
+                <li><a href="index.html#skills" class="nav-link">Skills</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Post Page -->
+    <section class="blog-post-page">
+        <div class="blog-post-container">
+            <!-- Back Link -->
+            <a href="index.html#blog" class="back-to-blog">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Blog</span>
+            </a>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <i class="fas fa-spinner"></i>
+                <p style="margin-top: 1rem; color: var(--text-secondary);">Loading article...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--error-color); margin-bottom: 1rem;"></i>
+                <h2>Article Not Found</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">The article you're looking for doesn't exist or has been removed.</p>
+                <a href="index.html#blog" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Blog
+                </a>
+            </div>
+
+            <!-- Blog Post Content -->
+            <article id="blogPost" style="display: none;">
+                <div class="blog-post-header">
+                    <div class="blog-post-meta">
+                        <span><i class="far fa-calendar"></i> <span id="postDate"></span></span>
+                        <span><i class="far fa-clock"></i> <span id="readTime"></span> min read</span>
+                        <span><i class="fas fa-eye"></i> <span id="postViews">0</span> views</span>
+                    </div>
+                    <span class="blog-post-category" id="postCategory"></span>
+                    <h1 class="blog-post-title" id="postTitle"></h1>
+                    <div class="blog-post-excerpt" id="postExcerpt"></div>
+                </div>
+
+                <div class="blog-post-content" id="postContent">
+                    <!-- Content will be loaded here -->
+                </div>
+
+                <div class="blog-post-footer">
+                    <div class="blog-post-tags" id="postTags">
+                        <!-- Tags will be loaded here -->
+                    </div>
+                    <div class="blog-post-actions">
+                        <button id="likeBtn" onclick="likePost()">
+                            <i class="far fa-heart"></i>
+                            <span id="likeCount">0</span>
+                        </button>
+                        <button onclick="sharePost()">
+                            <i class="fas fa-share-alt"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <div id="relatedPosts" style="display: none;">
+                <h2 style="margin-bottom: 2rem; font-size: 2rem;">Related Articles</h2>
+                <div class="blog-grid" id="relatedPostsGrid">
+                    <!-- Related posts will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">NM</span>
+                        <span class="logo-accent">.</span>
+                    </a>
+                    <p>Expert Shopify Developer crafting exceptional e-commerce experiences.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#portfolio">Portfolio</a></li>
+                        <li><a href="index.html#blog">Blog</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Nyasha Madzokere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        // Get blog post slug from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug') || urlParams.get('id');
+        
+        // API URL
+        const API_URL = (function() {
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                return 'http://localhost:5000/api';
+            }
+            return 'https://your-backend-url.herokuapp.com/api';
+        })();
+
+        let currentPost = null;
+        let postLiked = false;
+
+        // Load blog post
+        async function loadBlogPost() {
+            if (!slug) {
+                showError();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/blog/${slug}`);
+                
+                if (!response.ok && response.status === 404) {
+                    // Try to show static content as fallback
+                    showStaticContent(slug);
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    currentPost = data.data;
+                    displayPost(data.data);
+                    
+                    // Load related posts
+                    if (data.related && data.related.length > 0) {
+                        displayRelatedPosts(data.related);
+                    }
+                } else {
+                    showStaticContent(slug);
+                }
+            } catch (error) {
+                console.error('Error loading blog post:', error);
+                // Fallback to static content if API fails
+                showStaticContent(slug);
+            }
+        }
+
+        // Show static content as fallback
+        function showStaticContent(slug) {
+            const staticPosts = {
+                '10-essential-shopify-liquid-filters-every-developer-should-know': {
+                    title: '10 Essential Shopify Liquid Filters Every Developer Should Know',
+                    category: 'Shopify',
+                    excerpt: 'Master these powerful Liquid filters to create more dynamic and efficient Shopify themes.',
+                    content: `# 10 Essential Shopify Liquid Filters Every Developer Should Know
+
+Master these powerful Liquid filters to create more dynamic and efficient Shopify themes. From formatting dates to manipulating strings, these filters will level up your theme development.
+
+## 1. Date Filter
+
+The date filter is crucial for formatting dates in a user-friendly way:
+
+\`\`\`liquid
+{{ product.created_at | date: "%B %d, %Y" }}
+\`\`\`
+
+## 2. Money Filter
+
+Properly formatting prices is essential for e-commerce:
+
+\`\`\`liquid
+{{ product.price | money }}
+\`\`\`
+
+## 3. Truncate Filter
+
+Limit text length for previews:
+
+\`\`\`liquid
+{{ product.description | truncate: 100 }}
+\`\`\`
+
+[Continue reading...]`,
+                    publishedDate: '2024-11-20',
+                    readTime: 5,
+                    views: 0,
+                    likes: 0,
+                    tags: ['Liquid', 'Shopify', 'Development']
+                },
+                'building-a-headless-shopify-store-with-nextjs-and-storefront-api': {
+                    title: 'Building a Headless Shopify Store with Next.js and Storefront API',
+                    category: 'Development',
+                    excerpt: 'Learn how to build blazing-fast e-commerce experiences using Shopify\'s Storefront API with Next.js.',
+                    content: `# Building Headless Shopify with Next.js
+
+Headless commerce is revolutionizing the e-commerce landscape. Learn how to build a headless Shopify store using Next.js and the Storefront API.
+
+## Why Headless?
+
+- **Performance**: Lightning-fast page loads
+- **Flexibility**: Use any frontend framework
+- **Modern Stack**: Latest web technologies
+
+[Continue reading...]`,
+                    publishedDate: '2024-11-18',
+                    readTime: 8,
+                    views: 0,
+                    likes: 0,
+                    tags: ['Next.js', 'Headless', 'React']
+                }
+            };
+
+            const post = staticPosts[slug];
+            if (post) {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('blogPost').style.display = 'block';
+                displayPost(post);
+            } else {
+                showError();
+            }
+        }
+
+        // Display blog post
+        function displayPost(post) {
+            // Hide loading, show content
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('blogPost').style.display = 'block';
+
+            // Set meta information
+            document.getElementById('postCategory').textContent = post.category;
+            document.getElementById('postTitle').textContent = post.title;
+            document.getElementById('postExcerpt').textContent = post.excerpt;
+            
+            // Format date
+            const date = new Date(post.publishedDate || post.createdAt);
+            document.getElementById('postDate').textContent = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Set read time and views
+            document.getElementById('readTime').textContent = post.readTime || 5;
+            document.getElementById('postViews').textContent = post.views || 0;
+            document.getElementById('likeCount').textContent = post.likes || 0;
+
+            // Display content (convert markdown to HTML - simple version)
+            const contentEl = document.getElementById('postContent');
+            contentEl.innerHTML = convertMarkdownToHTML(post.content);
+
+            // Display tags
+            const tagsEl = document.getElementById('postTags');
+            if (post.tags && post.tags.length > 0) {
+                tagsEl.innerHTML = post.tags.map(tag => 
+                    `<span>${tag}</span>`
+                ).join('');
+            } else {
+                tagsEl.innerHTML = '';
+            }
+
+            // Update page title and meta
+            document.title = `${post.title} - Nyasha Madzokere | Shopify Developer`;
+            if (post.seo && post.seo.metaDescription) {
+                document.querySelector('meta[name="description"]').content = post.seo.metaDescription;
+            }
+        }
+
+        // Convert markdown to HTML (simple version)
+        function convertMarkdownToHTML(markdown) {
+            if (!markdown) return '<p>No content available.</p>';
+            
+            let html = markdown
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                // Bold
+                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+                // Italic
+                .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+                // Code blocks
+                .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
+                // Inline code
+                .replace(/`(.*?)`/gim, '<code>$1</code>')
+                // Links
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+                // Line breaks
+                .replace(/\n\n/gim, '</p><p>')
+                .replace(/\n/gim, '<br>');
+            
+            // Wrap in paragraph if not already wrapped
+            if (!html.startsWith('<')) {
+                html = '<p>' + html + '</p>';
+            }
+            
+            return html;
+        }
+
+        // Display related posts
+        function displayRelatedPosts(related) {
+            const relatedEl = document.getElementById('relatedPosts');
+            const gridEl = document.getElementById('relatedPostsGrid');
+            
+            if (related.length === 0) {
+                relatedEl.style.display = 'none';
+                return;
+            }
+            
+            relatedEl.style.display = 'block';
+            gridEl.innerHTML = related.slice(0, 3).map(post => `
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <div class="blog-image-placeholder">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <span class="blog-badge">${post.category}</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> ${formatDate(post.publishedDate)}</span>
+                            <span><i class="far fa-clock"></i> ${post.readTime || 5} min read</span>
+                        </div>
+                        <h3>
+                            <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
+                        </h3>
+                        <p>${post.excerpt}</p>
+                        <div class="blog-footer">
+                            <div class="blog-tags">
+                                ${post.tags ? post.tags.map(tag => `<span>${tag}</span>`).join('') : ''}
+                            </div>
+                            <a href="blog-post.html?slug=${post.slug}" class="read-more">
+                                Read More <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Like post
+        async function likePost() {
+            if (!currentPost || postLiked) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/blog/${currentPost._id}/like`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    postLiked = true;
+                    document.getElementById('likeCount').textContent = data.likes;
+                    document.getElementById('likeBtn').classList.add('liked');
+                    document.getElementById('likeBtn').querySelector('i').classList.remove('far');
+                    document.getElementById('likeBtn').querySelector('i').classList.add('fas');
+                }
+            } catch (error) {
+                console.error('Error liking post:', error);
+            }
+        }
+
+        // Share post
+        function sharePost() {
+            if (navigator.share) {
+                navigator.share({
+                    title: currentPost.title,
+                    text: currentPost.excerpt,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        }
+
+        // Show error
+        function showError() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        // Load post on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBlogPost();
+        });
+    </script>
+</body>
+</html>
+

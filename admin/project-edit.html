@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Project - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><i class="fas fa-crown"></i> Admin Panel</div></div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="blogs.html" class="menu-item"><i class="fas fa-blog"></i><span>Blog Posts</span></a>
+                <a href="projects.html" class="menu-item active"><i class="fas fa-briefcase"></i><span>Projects</span></a>
+                <a href="contacts.html" class="menu-item"><i class="fas fa-envelope"></i><span>Contact Messages</span></a>
+                <a href="content.html" class="menu-item"><i class="fas fa-edit"></i><span>Website Content</span></a>
+                <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">New Project</h1>
+                <div class="user-info">
+                    <a href="projects.html" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                </div>
+            </div>
+
+            <form id="projectForm" class="editor-container" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                <div>
+                    <div class="card">
+                        <div class="form-group">
+                            <label for="title">Title *</label>
+                            <input type="text" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category *</label>
+                            <select id="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Fashion E-commerce">Fashion E-commerce</option>
+                                <option value="Beauty & Wellness">Beauty & Wellness</option>
+                                <option value="Jewelry">Jewelry</option>
+                                <option value="Home Decor">Home Decor</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Food & Beverage">Food & Beverage</option>
+                                <option value="Sports & Fitness">Sports & Fitness</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <textarea id="description" required rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">Tags (comma-separated)</label>
+                            <input type="text" id="tags" placeholder="Shopify, Liquid, React">
+                        </div>
+                        <div class="form-group">
+                            <label for="technologies">Technologies (comma-separated)</label>
+                            <input type="text" id="technologies" placeholder="JavaScript, CSS, HTML">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <h3 style="margin-bottom: 1rem;">Settings</h3>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="published">
+                                <span>Published</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="featured">
+                                <span>Featured</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="liveUrl">Live URL</label>
+                            <input type="url" id="liveUrl" placeholder="https://example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="githubUrl">GitHub URL</label>
+                            <input type="url" id="githubUrl" placeholder="https://github.com/...">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" id="saveBtn">
+                            <i class="fas fa-save"></i> Save Project
+                        </button>
+                        <div id="message" class="message" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        requireAuth();
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+        let isEdit = !!projectId;
+
+        if (isEdit) {
+            document.getElementById('pageTitle').textContent = 'Edit Project';
+            loadProject(projectId);
+        }
+
+        async function loadProject(id) {
+            try {
+                const response = await fetchWithAuth(`/projects/${id}`);
+                const data = await response.json();
+                if (data.success) {
+                    const p = data.data;
+                    document.getElementById('title').value = p.title || '';
+                    document.getElementById('category').value = p.category || '';
+                    document.getElementById('description').value = p.description || '';
+                    document.getElementById('tags').value = p.tags ? p.tags.join(', ') : '';
+                    document.getElementById('technologies').value = p.technologies ? p.technologies.join(', ') : '';
+                    document.getElementById('liveUrl').value = p.liveUrl || '';
+                    document.getElementById('githubUrl').value = p.githubUrl || '';
+                    document.getElementById('published').checked = p.published || false;
+                    document.getElementById('featured').checked = p.featured || false;
+                }
+            } catch (error) {
+                showToast('Error loading project', 'error');
+            }
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            const formData = {
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                tags: document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t),
+                technologies: document.getElementById('technologies').value.split(',').map(t => t.trim()).filter(t => t),
+                liveUrl: document.getElementById('liveUrl').value,
+                githubUrl: document.getElementById('githubUrl').value,
+                published: document.getElementById('published').checked,
+                featured: document.getElementById('featured').checked
+            };
+            
+            try {
+                const url = isEdit ? `/projects/${projectId}` : '/projects';
+                const method = isEdit ? 'PUT' : 'POST';
+                const response = await fetchWithAuth(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    showToast(`Project ${isEdit ? 'updated' : 'created'}!`, 'success');
+                    setTimeout(() => window.location.href = 'projects.html', 1500);
+                } else {
+                    showMessage(data.message || 'Error saving', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save"></i> Save Project';
+                }
+            } catch (error) {
+                showMessage('Error saving project', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Project';
+            }
+        });
+
+        function showMessage(msg, type) {
+            const el = document.getElementById('message');
+            el.textContent = msg;
+            el.className = `message ${type}`;
+            el.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+

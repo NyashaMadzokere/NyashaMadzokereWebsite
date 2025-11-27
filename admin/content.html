@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Content - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><i class="fas fa-crown"></i> Admin Panel</div></div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="blogs.html" class="menu-item"><i class="fas fa-blog"></i><span>Blog Posts</span></a>
+                <a href="projects.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Projects</span></a>
+                <a href="content.html" class="menu-item active"><i class="fas fa-edit"></i><span>Website Content</span></a>
+                <a href="contacts.html" class="menu-item"><i class="fas fa-envelope"></i><span>Contact Messages</span></a>
+                <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">Website Content</h1>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <span id="userName">Admin</span>
+                    <button class="btn btn-sm btn-secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="card" style="cursor: pointer;" onclick="editSection('hero')">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #96bf48, #5c8a2e); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0;">Hero Section</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">Main landing area</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="editSection('about')">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3b82f6, #1e40af); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0;">About Section</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">About you</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="editSection('services')">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0;">Services Section</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">Your services</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="editSection('portfolio')">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0;">Portfolio Section</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">Your work</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="editSection('skills')">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8b5cf6, #6d28d9); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0;">Skills Section</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">Technical skills</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="editSection('contact')">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 0.25rem 0;">Contact Section</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">Contact info</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        requireAuth();
+        const user = getUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+        }
+
+        function editSection(section) {
+            window.location.href = `content-edit.html?section=${section}`;
+        }
+    </script>
+</body>
+</html>
+
