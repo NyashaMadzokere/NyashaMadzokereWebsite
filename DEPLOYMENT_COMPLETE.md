@@ -103,7 +103,7 @@ Replace `your-portfolio-api` with your preferred name (must be unique).
 
 ```bash
 # MongoDB (use your existing Atlas connection string)
-heroku config:set MONGODB_URI="mongodb+srv://madzokeren_db_user:kFfn6LmtvGiHPkMM@nyashamadzokere.vedsmnm.mongodb.net/portfolio?appName=NyashaMadzokere"
+heroku config:set MONGODB_URI=""
 
 # JWT Secret (use a long random string)
 heroku config:set JWT_SECRET="your-super-secret-jwt-key-make-it-long-and-random"
